@@ -15,4 +15,5 @@ Rails.application.routes.draw do
   post '/register', to: 'users#create'
 
   get '/login', to: 'users#login'
+  post '/login', to: 'users#login_user'
 end

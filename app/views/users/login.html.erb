@@ -1,0 +1,10 @@
+<h1>User Login</h1>
+<p><%= link_to 'Landing Page', '/' %></p>
+
+<%= form_with url: '/login', method: :post, local: true do |f| %>
+    <%= f.label :email, "User Email:" %>
+    <%= f.text_field :email %>
+    <%= f.label :password, "User Password:" %>
+    <%= f.password_field :password %>
+    <%= f.submit "Login" %>
+<% end %>
