@@ -31,7 +31,20 @@ RSpec.describe 'New User' do
       click_button 'Register User'
 
       expect(current_path).to eq('/register')
-      expect(page).to have_content('This email has already been registered')
+      expect(page).to have_content('Email has already been taken')
+    end
+    
+    it "if the password and password_confirmation don't match, the user is redirected to
+    the form to register a new user where they see an error indicating
+    the passwords don't match." do
+      fill_in 'name', with: 'Ulrich'
+      fill_in 'email', with: 'ulrich@time.com'
+      fill_in 'password', with: 'password123'
+      fill_in 'password_confirmation', with: 'password124'
+      click_button 'Register User'
+
+      expect(current_path).to eq('/register')
+      expect(page).to have_content("Password confirmation doesn't match Password")
     end
   end
 end

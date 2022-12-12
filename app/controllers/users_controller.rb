@@ -8,12 +8,12 @@ class UsersController < ApplicationController
   def new; end
 
   def create
-    user = User.new(user_params)
+    user = User.create(user_params)
     if user.save
       redirect_to "/users/#{user.id}"
     else
       redirect_to '/register'
-      flash[:alert] = 'Error: This email has already been registered'
+      flash[:alert] = user.errors.full_messages
     end
   end
 
@@ -24,6 +24,6 @@ class UsersController < ApplicationController
   private
 
   def user_params
-    params.permit(:name, :email, :password)
+    params.permit(:name, :email, :password, :password_confirmation)
   end
 end
