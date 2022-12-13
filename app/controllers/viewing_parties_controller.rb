@@ -4,8 +4,14 @@ class ViewingPartiesController < ApplicationController
   before_action :find_user
 
   def new
-    @movie = MoviesFacade.get_movie_heavy(params[:movie_id])
-    @users = User.find_all_except(@user)
+    # require 'pry'; binding.pry
+    if session[:user_id] != params[:user_id].to_i
+      redirect_to user_movie_path(params[:user_id], params[:movie_id])
+      flash[:alert] = "You must be logged in or registered to create a viewing party"
+    elsif session[:user_id] == params[:user_id].to_i
+      @movie = MoviesFacade.get_movie_heavy(params[:movie_id])
+      @users = User.find_all_except(@user)
+    end
   end
 
   def create

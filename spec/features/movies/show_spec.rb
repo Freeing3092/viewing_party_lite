@@ -34,8 +34,25 @@ RSpec.describe 'Movies Detail (show) page' do
       end
     end
   end
-
+  
   describe 'as a user' do
+    before :each do
+      @user = User.create!(name: 'Watson', email: 'watson@sleuth.com', password: 'password')
+      visit '/login'
+      fill_in "email", with: "watson@sleuth.com"
+      fill_in "password", with: "password"
+      
+      click_button 'Login'
+
+      VCR.use_cassette('movie_details') do
+        VCR.use_cassette('movie_credits') do
+          VCR.use_cassette('movie_reviews') do
+            visit "/users/#{@user.id}/movies/#{@godfather.id}"
+          end
+        end
+      end
+    end
+
     it 'I see a button to create a viewing party' do
       expect(page).to have_button("Create Viewing Party for #{@godfather.movie_title}")
 
@@ -84,6 +101,24 @@ RSpec.describe 'Movies Detail (show) page' do
     end
     it 'I do not see content related to other movies' do
       expect(page).to_not have_content(@another_movie.movie_title)
+    end
+  end
+
+  describe 'as a visitor' do
+    it "I'm redirected to the movies show page, and a message appears to let me
+    know I must be logged in or registered to create a movie party." do
+      expect(page).to have_button("Create Viewing Party for #{@godfather.movie_title}")
+  
+      VCR.use_cassette('movie_details') do
+        VCR.use_cassette('movie_credits') do
+          VCR.use_cassette('movie_reviews') do
+            click_button("Create Viewing Party for #{@godfather.movie_title}")
+          end
+        end
+      end
+  
+      expect(current_path).to eq("/users/#{@user.id}/movies/#{@godfather.id}")
+      expect(page).to have_content('You must be logged in or registered to create a viewing party')
     end
   end
 end
