@@ -4,7 +4,12 @@ require 'rails_helper'
 
 RSpec.describe 'the new viewing parties page' do
   before(:each) do
-    @user1 = create(:user)
+    @user1 = User.create!(name: 'Watson', email: 'watson@sleuth.com', password: 'password')
+    visit '/login'
+    fill_in "email", with: "watson@sleuth.com"
+    fill_in "password", with: "password"
+
+    click_button 'Login'
     @user2 = create(:user)
     @user3 = create(:user)
 

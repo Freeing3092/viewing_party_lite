@@ -36,6 +36,15 @@ RSpec.describe 'Landing Page' do
       click_link 'Log In'
       expect(current_path).to eq('/login')
     end
+
+    it 'if I try to visit my dashboard, I remain on the landing page And I see
+    a message telling me that I must be logged in or registered to access my
+    dashboard' do
+      visit "/users/#{@user1.id}"
+
+      expect(current_path).to eq('/')
+      expect(page).to have_content('You must be logged in or registered to access your dashboard')
+    end
   end
 
   describe 'as a logged in user' do  

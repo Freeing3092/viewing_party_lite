@@ -4,7 +4,13 @@ require 'rails_helper'
 
 RSpec.describe 'the user dashboard' do
   before(:each) do
-    @user = create(:user)
+    @user = User.create!(name: 'Watson', email: 'watson@sleuth.com', password: 'password')
+    visit '/login'
+    fill_in "email", with: "watson@sleuth.com"
+    fill_in "password", with: "password"
+
+    click_button 'Login'
+    
     @invitee1 = create(:user)
     @invitee2 = create(:user)
     @invitee3 = create(:user)
