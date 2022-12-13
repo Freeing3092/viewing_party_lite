@@ -1,5 +1,10 @@
-<p><%= link_to 'Log In', '/login' %></p>
-<p><%= button_to 'Create New User', '/register', method: :get %></p>
+<% if session[:user_id].nil? %>
+  <p><%= link_to 'Log In', '/login' %></p>
+  <p><%= button_to 'Create New User', '/register', method: :get %></p>
+<% else %>
+  <p><%= link_to 'Log Out', '/logout' %></p>
+<% end %>
+
 
 <div id="users">
     <ul>

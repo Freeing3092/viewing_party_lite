@@ -41,4 +41,29 @@ RSpec.describe 'Landing Page' do
       expect(current_path).to eq('/login')
     end
   end
+
+  describe 'as a logged in user' do  
+    before :each do
+      @user = User.create!(name: 'Watson', email: 'watson@sleuth.com', password: 'password')
+      visit '/login'
+      fill_in "email", with: "watson@sleuth.com"
+      fill_in "password", with: "password"
+
+      click_button 'Login'
+      visit '/'
+    end
+    it "I no longer see a link to Log In or Create an Account But I see a link
+    to Log Out. When I click the link to Log Out I'm taken to the landing page
+    And I can see that the Log Out link has changed back to a Log In link" do
+      expect(page).to have_no_link('Log In')
+      expect(page).to have_no_button('Create New User')
+      expect(page).to have_link('Log Out')
+
+      click_link 'Log Out'
+      
+      expect(current_path).to eq('/')
+      expect(page).to have_link('Log In')
+      expect(page).to have_button('Create New User')
+    end
+  end
 end

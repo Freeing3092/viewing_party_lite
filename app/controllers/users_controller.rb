@@ -10,6 +10,7 @@ class UsersController < ApplicationController
   def create
     user = User.create(user_params)
     if user.save
+      session[:user_id] = user.id
       redirect_to "/users/#{user.id}"
     else
       redirect_to '/register'
@@ -32,6 +33,11 @@ class UsersController < ApplicationController
       redirect_to '/login'
       flash[:alert] = 'Invalid email/password'
     end
+  end
+
+  def logout
+    session[:user_id] = nil
+    redirect_to '/'
   end
 
   private
