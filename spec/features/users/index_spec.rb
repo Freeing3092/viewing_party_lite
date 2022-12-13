@@ -9,7 +9,7 @@ RSpec.describe 'Landing Page' do
     visit '/'
   end
 
-  describe 'as a user' do
+  describe 'as a visitor' do
     it 'I see the title of the application' do
       expect(page).to have_content('Viewing Party')
     end
@@ -20,11 +20,9 @@ RSpec.describe 'Landing Page' do
       expect(current_path).to eq('/register')
     end
 
-    it 'I see a list of existing users' do
-      within('#users') do
-        expect(page).to have_content(@user1.name)
-        expect(page).to have_content(@user2.name)
-      end
+    it 'I do not see a list of existing users' do
+      expect(page).to_not have_content(@user1.name)
+      expect(page).to_not have_content(@user2.name)
     end
 
     it 'I see a link to the landing page' do
@@ -35,9 +33,7 @@ RSpec.describe 'Landing Page' do
 
     it 'I see a link to login' do
       expect(page).to have_link('Log In')
-
       click_link 'Log In'
-
       expect(current_path).to eq('/login')
     end
   end
@@ -52,6 +48,7 @@ RSpec.describe 'Landing Page' do
       click_button 'Login'
       visit '/'
     end
+
     it "I no longer see a link to Log In or Create an Account But I see a link
     to Log Out. When I click the link to Log Out I'm taken to the landing page
     And I can see that the Log Out link has changed back to a Log In link" do
@@ -64,6 +61,13 @@ RSpec.describe 'Landing Page' do
       expect(current_path).to eq('/')
       expect(page).to have_link('Log In')
       expect(page).to have_button('Create New User')
+    end
+
+    it 'I see the list of users as a list of email addresses' do
+      within("#users") do
+        expect(page).to have_content(@user1.email)
+        expect(page).to have_content(@user2.email)
+      end
     end
   end
 end
